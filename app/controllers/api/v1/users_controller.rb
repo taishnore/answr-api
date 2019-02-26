@@ -1,8 +1,8 @@
-class UserController < ApplicationController
+class Api::V1::UsersController < ApplicationController
 
   def index
     @users = User.all
-    render json: @user
+    render json: @users
   end
 
   def show
@@ -21,7 +21,7 @@ class UserController < ApplicationController
     end
   end
 
-  
+
 
   private
 
