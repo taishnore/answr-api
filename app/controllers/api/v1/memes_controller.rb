@@ -15,9 +15,6 @@ class Api::V1::MemesController < ApplicationController
     if @meme.valid?
       @meme.save
       render json: @meme
-    else
-      flash[:error] = @meme.errors.full_messages
-      #how to render to front_end?
     end
   end
 
@@ -31,7 +28,7 @@ class Api::V1::MemesController < ApplicationController
   private
 
   def meme_params
-    params.require(:meme).permit(:title, :string, :user_id)
+    params.require(:meme).permit(:title, :url, :user_id)
   end
 
 end
