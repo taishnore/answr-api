@@ -16,9 +16,3 @@ Meme.create(
   url: "https://ametia.files.wordpress.com/2014/03/neil-degrasse-tyson.jpg",
   user_id: User.find_by(name: "Taimur").id
 )
-
-Meme.create(
-  title: "Neil",
-  url: "https://ametia.files.wordpress.com/2014/03/neil-degrasse-tyson.jpg",
-  user_id: User.find_by(name: "Taimur").id
-)
