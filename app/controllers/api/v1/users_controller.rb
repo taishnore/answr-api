@@ -1,4 +1,6 @@
 class Api::V1::UsersController < ApplicationController
+  skip_before_action :authorized, only: [:create]
+
 
   def index
     @users = User.all
@@ -14,9 +16,11 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.valid?
       @user.save
-      render json: @user
+      @token = encode_token(user_id: @user.id)
+      render json: {user: UserSerializer.new(@user), jwt: @token}, status: :created
+      # user: UserSerializer.new(@user) -- what's the difference from above?
     else
-      flash[:error] = @user.errors.full_messages
+      render json: { error: "failed to create user" }, status: :not_acceptable
       #how is the error showing?
     end
   end
@@ -26,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:name, :email, :password)
   end
 
 end
