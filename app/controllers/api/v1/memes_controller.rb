@@ -1,4 +1,5 @@
 class Api::V1::MemesController < ApplicationController
+  skip_before_action :authorized
 
   def index
     @memes = Meme.all
