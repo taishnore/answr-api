@@ -20,7 +20,7 @@ class Api::V1::UsersController < ApplicationController
       render json: {user: UserSerializer.new(@user), jwt: @token}, status: :created
       # user: UserSerializer.new(@user) -- what's the difference from above?
     else
-      render json: { error: "failed to create user" }, status: :not_acceptable
+      render json: { error: "failed to create user, please try again" }, status: :not_acceptable
       #how is the error showing?
     end
   end

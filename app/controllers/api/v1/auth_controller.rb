@@ -10,6 +10,8 @@ class Api::V1::AuthController < ApplicationController #this is, i think, to hand
       #this creates a token that basically acts like sessions;
       #is it what allows the user to make API requests
       render json: {user: UserSerializer.new(@user), jwt: @token}, status: :created
+    else
+      render json: {error: "Login unsuccesful, please try again"}, status: :not_acceptable
     end
   end
 
