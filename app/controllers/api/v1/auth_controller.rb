@@ -1,7 +1,6 @@
-class Api::V1::AuthController < ApplicationController #this is, i think, to handle an already existing user logging in.
-  skip_before_action :authorized, only: [:create]
-  #so that the user can login before the authorized method runs,
-  #which sees whether the user is logged in.
+class Api::V1::AuthController < ApplicationController
+  # skip_before_action :authorized, only: [:create]
+
 
   def create
     @user = User.find_by(email: user_login_params[:email])
@@ -12,6 +11,16 @@ class Api::V1::AuthController < ApplicationController #this is, i think, to hand
       render json: {user: UserSerializer.new(@user), jwt: @token}, status: :created
     else
       render json: {error: "Login unsuccesful, please try again"}, status: :not_acceptable
+    end
+  end
+
+  def show
+
+    @user = current_user
+    if @user
+      render json: {user: @user}, status: :accepted
+    else
+      render json: { message: 'I am making progress' }, status: :unauthorized
     end
   end
 

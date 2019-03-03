@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create, :show, :index]
         post '/login', to: 'auth#create'
+        get '/user', to: 'auth#show' 
       resources :memes
     end
   end

@@ -4,6 +4,7 @@ class Api::V1::UsersController < ApplicationController
 
   def index
     @users = User.all
+    authorized User
     render json: @users
   end
 
