@@ -12,8 +12,10 @@ class ApplicationController < ActionController::API
   end
 
   def decoded_token
-    token = auth_header
-    JWT.decode(token, "taimurs_secret")[0]
+    if auth_header
+      token = auth_header
+      JWT.decode(token, "taimurs_secret")[0]
+    end
   end
 
   def current_user
