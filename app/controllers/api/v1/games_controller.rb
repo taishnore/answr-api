@@ -23,13 +23,12 @@ class Api::V1::GamesController < ApplicationController
       "Next time on Dr. Phil: How to talk to your kids about ___",
       "Hey baby, come back to my place and I'll show you ___"
      ]
-     #byebug
     @game = Game.new(title: game_params[:title], number_of_rounds: 3)
     if @game.valid?
       @game.save
-      UserGame.create(game_id: @game.id, user_id: game_params[:user_id])
-      #where is the user_id coming from?
-      #i forsee this being a bug.
+
+      @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+
 
       3.times do
         Round.create(game_id: @game.id, prompt: @prompts.sample )
