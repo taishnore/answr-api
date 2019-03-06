@@ -34,12 +34,19 @@ class Api::V1::GamesController < ApplicationController
         Round.create(game_id: @game.id, prompt: @prompts.sample )
       end
       @rounds = @game.rounds
-      render json: { game: GameSerializer.new(@game), rounds: @rounds }
+      @users = @game.users
+      render json: { game: GameSerializer.new(@game), rounds: @rounds, users: @users }
       serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
       ActionCable.server.broadcast "games_channel", serialized_data
     end
   end
 
+  def destroy
+    @game = Game.find(params[:id])
+    @game_id = params[:id]
+    @game.destroy
+    ActionCable.server.broadcast "games_channel", { message: "The game has been deleted", id: @game_id }.to_json
+  end
 
 
   private
