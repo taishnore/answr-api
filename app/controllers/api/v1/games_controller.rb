@@ -45,7 +45,7 @@ class Api::V1::GamesController < ApplicationController
     @game = Game.find(params[:id])
     @game_id = params[:id]
     @game.destroy
-    ActionCable.server.broadcast "games_channel", { message: "The game has been deleted", id: @game_id }.to_json
+    ActionCable.server.broadcast "games_channel", { message: "The game has been deleted", id: @game_id }
   end
 
 
