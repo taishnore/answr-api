@@ -7,6 +7,8 @@ Rails.application.routes.draw do
         post '/login', to: 'auth#create'
         get '/user', to: 'auth#show'
         post '/start', to: 'rounds#start'
+        post '/answer', to: 'rounds#answer'
+        post '/increment', to: 'rounds#increment'
       resources :memes
       resources :games
       resources :rounds
