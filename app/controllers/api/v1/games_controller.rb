@@ -27,7 +27,7 @@ class Api::V1::GamesController < ApplicationController
     if @game.valid?
       @game.save
 
-      @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+      UserGame.create(game_id: @game.id, user_id: params[:user_id])
 
 
       3.times do
@@ -46,6 +46,21 @@ class Api::V1::GamesController < ApplicationController
     @game_id = params[:id]
     @game.destroy
     ActionCable.server.broadcast "games_channel", { message: "The game has been deleted", id: @game_id }
+  end
+
+  def update
+    @game = Game.find(params[:id])
+    if @game.users.length < 2
+      @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+      @game.update(is_game_in_play: true)
+      @game = Game.find(params[:id])
+      render json: @game
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
+      puts serialized_data
+      RoundsChannel.broadcast_to @game, serialized_data
+    else
+      render json: { error: "The game is full" }
+    end
   end
 
 
