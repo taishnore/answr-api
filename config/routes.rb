@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, only: [:create, :show, :index]
         post '/login', to: 'auth#create'
         get '/user', to: 'auth#show'
+        post '/start', to: 'rounds#start'
       resources :memes
       resources :games
       resources :rounds
