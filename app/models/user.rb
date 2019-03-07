@@ -9,7 +9,6 @@ class User < ApplicationRecord
   has_many :rounds, through: :answers
 
   validates :name, presence: true
-  validates :name, uniqueness: { case_sensitive: false }
   validates :email, presence: true, uniqueness: true
 
 end
