@@ -11,6 +11,7 @@ class Api::V1::GamesController < ApplicationController
   end
 
   def create
+    # where can I put these prompts? this is messy!
     @prompts = [
       "Worst gift to bring to a funeral?",
       "What is Avi's deep and dark secret?",
@@ -22,29 +23,65 @@ class Api::V1::GamesController < ApplicationController
       "What helps Obama unwind?",
       "Make a haiku",
       "What am I giving up for lent?",
-      "What never fails to liven up the party?", 
+      "What never fails to liven up the party?",
       "What's really at the end of the rainbow?",
       "Charades was ruined for me when my mom had to act out___",
       "This is the time of my life. I'm young, energetic, and full of ___",
       "Next time on Dr. Phil: How to talk to your kids about ___",
       "Hey baby, come back to my place and I'll show you ___"
      ]
+
+
     @game = Game.new(title: game_params[:title], number_of_rounds: 3)
+
+
     if @game.valid?
       @game.save
 
       UserGame.create(game_id: @game.id, user_id: params[:user_id])
 
+      @shuffledPrompts = @prompts.shuffle.each{ |x| }
 
-      3.times do
-        Round.create(game_id: @game.id, prompt: @prompts.sample )
+
+      # 3.times do
+      #   Round.create(game_id: @game.id, prompt: @prompts.sample )
+      # end
+
+      i=0
+      9.times do
+        Round.create(game_id: @game.id, prompt: @shuffledPrompts[i] )
+        i+=1
       end
-      @rounds = @game.rounds
+
+      @rounds = {
+        one: {
+          one: @game.rounds[0],
+          two: @game.rounds[1],
+          three: @game.rounds[2],
+        },
+        two: {
+          four: @game.rounds[3],
+          five: @game.rounds[4],
+          six: @game.rounds[5],
+        },
+        three: {
+          seven: @game.rounds[6],
+          eight: @game.rounds[7],
+          nine: @game.rounds[8],
+        },
+      }
+
+
       @users = @game.users
+
+
       render json: { game: GameSerializer.new(@game), rounds: @rounds, users: @users }
+
+
       serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
       ActionCable.server.broadcast "games_channel", serialized_data
     end
+
   end
 
   def destroy
