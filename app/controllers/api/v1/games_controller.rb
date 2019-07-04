@@ -14,14 +14,11 @@ class Api::V1::GamesController < ApplicationController
     # where can I put these prompts? this is messy!
     @prompts = [
       "Worst gift to bring to a funeral?",
-      "What is Avi's deep and dark secret?",
       "I drink to forget ____",
       "Why can't I sleep at night?",
       "Next from JK Rowling: Harry Potter and the Chamber of ____",
       "What are my parents hiding from me?",
-      "Step one: ____. Step two: ____. Step three: profit.",
       "What helps Obama unwind?",
-      "Make a haiku",
       "What am I giving up for lent?",
       "What never fails to liven up the party?",
       "What's really at the end of the rainbow?",
