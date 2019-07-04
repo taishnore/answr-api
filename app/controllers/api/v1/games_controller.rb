@@ -26,7 +26,7 @@ class Api::V1::GamesController < ApplicationController
       "This is the time of my life. I'm young, energetic, and full of ___",
       "Next time on Dr. Phil: How to talk to your kids about ___",
       "Hey baby, come back to my place and I'll show you ___"
-     ]
+    ]
 
 
     @game = Game.new(title: game_params[:title], number_of_rounds: 3)
@@ -37,12 +37,8 @@ class Api::V1::GamesController < ApplicationController
 
       UserGame.create(game_id: @game.id, user_id: params[:user_id])
 
+      # this shuffles the prompts array.
       @shuffledPrompts = @prompts.shuffle.each{ |x| }
-
-
-      # 3.times do
-      #   Round.create(game_id: @game.id, prompt: @prompts.sample )
-      # end
 
       i=0
       9.times do
@@ -90,14 +86,26 @@ class Api::V1::GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    if @game.users.length < 2
-      @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
-      @game.update(is_game_in_play: true)
-      @game = Game.find(params[:id])
-      render json: @game
-      serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
-      puts serialized_data
-      RoundsChannel.broadcast_to @game, serialized_data
+    if @game.users.length < 3
+
+      if @game.users.length == 1
+        @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+
+        @game = Game.find(params[:id])
+        render json: @game
+        serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
+        puts serialized_data
+        RoundsChannel.broadcast_to @game, serialized_data
+      elsif @game.users.length == 2
+        @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+        @game.update(is_game_in_play: true)
+        @game = Game.find(params[:id])
+        render json: @game
+        serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
+        puts serialized_data
+        RoundsChannel.broadcast_to @game, serialized_data
+      end
+
     else
       render json: { error: "The game is full" }
     end
