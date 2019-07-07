@@ -92,17 +92,58 @@ class Api::V1::GamesController < ApplicationController
         @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
 
         @game = Game.find(params[:id])
-        render json: @game
+
+        @rounds = {
+          "one": [
+            @game.rounds[0],
+            @game.rounds[1],
+            @game.rounds[2],
+          ],
+          "two": [
+            @game.rounds[3],
+            @game.rounds[4],
+            @game.rounds[5],
+          ],
+          "three": [
+            @game.rounds[6],
+            @game.rounds[7],
+            @game.rounds[8],
+          ],
+        }
+
+        render json: {game: @game, rounds: @rounds, users: @game.users}
         serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
-        puts serialized_data
+        puts "*************************************************"
+        puts @game.users.each { |u| u.name  }
+        puts "*************************************************"
         RoundsChannel.broadcast_to @game, serialized_data
       elsif @game.users.length == 2
         @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
         @game.update(is_game_in_play: true)
         @game = Game.find(params[:id])
-        render json: @game
+        @rounds = {
+          "one": [
+            @game.rounds[0],
+            @game.rounds[1],
+            @game.rounds[2],
+          ],
+          "two": [
+            @game.rounds[3],
+            @game.rounds[4],
+            @game.rounds[5],
+          ],
+          "three": [
+            @game.rounds[6],
+            @game.rounds[7],
+            @game.rounds[8],
+          ],
+        }
+
+        render json: {game: @game, rounds: @rounds, users: @game.users}
         serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
-        puts serialized_data
+        puts "*************************************************"
+        puts @game.users.each { |u| u.name  }
+        puts "*************************************************"
         RoundsChannel.broadcast_to @game, serialized_data
       end
 
