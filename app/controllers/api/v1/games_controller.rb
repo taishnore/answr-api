@@ -88,65 +88,34 @@ class Api::V1::GamesController < ApplicationController
     @game = Game.find(params[:id])
     if @game.users.length < 3
 
-      if @game.users.length == 1
-        @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
-
-        @game = Game.find(params[:id])
-
-        @rounds = {
-          "one": [
-            @game.rounds[0],
-            @game.rounds[1],
-            @game.rounds[2],
-          ],
-          "two": [
-            @game.rounds[3],
-            @game.rounds[4],
-            @game.rounds[5],
-          ],
-          "three": [
-            @game.rounds[6],
-            @game.rounds[7],
-            @game.rounds[8],
-          ],
-        }
-
-        render json: {game: @game, rounds: @rounds, users: @game.users}
-        serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
-        puts "*************************************************"
-        puts @game.users.each { |u| u.name  }
-        puts "*************************************************"
-        RoundsChannel.broadcast_to @game, serialized_data
-      elsif @game.users.length == 2
-        @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
+      if @game.users.length == 2
         @game.update(is_game_in_play: true)
+      end
+        @join = UserGame.create(game_id: @game.id, user_id: params[:user_id])
         @game = Game.find(params[:id])
         @rounds = {
-          "one": [
+          1 => [
             @game.rounds[0],
             @game.rounds[1],
             @game.rounds[2],
           ],
-          "two": [
+          2 => [
             @game.rounds[3],
             @game.rounds[4],
             @game.rounds[5],
           ],
-          "three": [
+          3 => [
             @game.rounds[6],
             @game.rounds[7],
             @game.rounds[8],
           ],
         }
-
-        render json: {game: @game, rounds: @rounds, users: @game.users}
+        puts "YOYOYOYOYOYOYO"
+        puts @game.users
+        puts "TOTOTOTOTOTOTO"
         serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
-        puts "*************************************************"
-        puts @game.users.each { |u| u.name  }
-        puts "*************************************************"
+        render json: {game: GameSerializer.new(@game), rounds: @rounds, users: @game.users}
         RoundsChannel.broadcast_to @game, serialized_data
-      end
-
     else
       render json: { error: "The game is full" }
     end
