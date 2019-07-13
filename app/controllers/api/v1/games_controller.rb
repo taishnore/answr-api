@@ -47,17 +47,17 @@ class Api::V1::GamesController < ApplicationController
       end
 
       @rounds = {
-        "one": [
+        1 => [
           @game.rounds[0],
           @game.rounds[1],
           @game.rounds[2],
         ],
-        "two": [
+        2 => [
           @game.rounds[3],
           @game.rounds[4],
           @game.rounds[5],
         ],
-        "three": [
+        3 => [
           @game.rounds[6],
           @game.rounds[7],
           @game.rounds[8],
