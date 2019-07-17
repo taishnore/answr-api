@@ -12,14 +12,13 @@ class Api::V1::RoundsController < ApplicationController
   end
 
   def answer
-
     puts params
-    # @round = Game.find(round_params[:game_id]).rounds.find(round_params[:round_id])
-    # @answer = Answer.create(user_id: round_params[:user_id], round_id: round_params[:round_id], answer_text: round_params[:answer_text])
-
-    # RoundsChannel.broadcast_to @game, {answer: `#{@answer.answer_text}`, user_id: `#{@answer.user_id}`}
-    RoundsChannel.broadcast_to @game, {new_answer: "there has been an answer"}
+    @round = Game.find(params[:game_id]).rounds.find(params[:round_id])
+    @answer = Answer.create(user_id: params[:user_id], round_id: params[:round_id], answer_text: params[:answer_text])
+    @game = Game.find(params[:game_id])
+    RoundsChannel.broadcast_to @game, {answer: @answer.answer_text, user_id: @answer.user_id}
   end
+
 
   def increment
     puts params
