@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2019_03_05_140129) do
   create_table "rounds", force: :cascade do |t|
     t.integer "game_id"
     t.string "prompt"
+    t.integer "winner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
