@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_05_140129) do
+ActiveRecord::Schema.define(version: 2019_07_23_222004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,9 @@ ActiveRecord::Schema.define(version: 2019_03_05_140129) do
     t.integer "number_of_rounds", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "player_one_id"
+    t.integer "player_two_id"
+    t.integer "player_three_id"
   end
 
   create_table "memes", force: :cascade do |t|
