@@ -26,6 +26,21 @@ class Api::V1::RoundsController < ApplicationController
     RoundsChannel.broadcast_to @game, {increment: "time to increment"}
   end
 
+  def update
+
+    @round = Round.find(params[:roundId])
+    @round.update(winner_id: params[:userId])
+
+    @round = Round.find(params[:roundId])
+
+    @name = User.find{|user| user.id == params[:userId]}.name
+
+    @game = Game.find(params[:gameId])
+
+    RoundsChannel.broadcast_to @game, {winner: @name}
+
+  end
+
   private
 
   def round_params

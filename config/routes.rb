@@ -9,6 +9,7 @@ Rails.application.routes.draw do
         post '/start', to: 'rounds#start'
         post '/answer', to: 'rounds#answer'
         post '/increment', to: 'rounds#increment'
+        patch '/vote', to: 'rounds#vote'
       resources :memes
       resources :games
       resources :rounds
