@@ -22,8 +22,17 @@ class Api::V1::RoundsController < ApplicationController
 
   def increment
     puts params
-    @game = Game.find(params[:game_id])
-    RoundsChannel.broadcast_to @game, {increment: "time to increment"}
+    @game = Game.find(params[:gameId])
+
+    if params[:type] == "prompt"
+      RoundsChannel.broadcast_to @game, {increment: "prompt"}
+    elsif params[:type] == "round"
+      RoundsChannel.broadcast_to @game, {increment: "round"}
+    elsif params[:type] == "end"
+      RoundsChannel.broadcast_to @game, {increment: "end"}
+    end
+
+
   end
 
   def update
