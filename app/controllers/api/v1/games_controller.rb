@@ -1,5 +1,7 @@
 class Api::V1::GamesController < ApplicationController
 
+##gotta fix everything.
+
   def index
     @games = Game.all
     render json: @games
@@ -72,7 +74,6 @@ class Api::V1::GamesController < ApplicationController
       serialized_data = ActiveModelSerializers::Adapter::Json.new(GameSerializer.new(@game)).serializable_hash
       ActionCable.server.broadcast "games_channel", serialized_data
     end
-
   end
 
   def destroy
@@ -110,7 +111,7 @@ class Api::V1::GamesController < ApplicationController
         }
 
         if @game.users.length == 2
-      
+
           @game.update(player_two_id: params[:user_id] )
           @player_one = @game.users.find{ |user| user.id == @game.player_one_id}
           @player_two = @game.users.find{|user| user.id == @game.player_two_id}
