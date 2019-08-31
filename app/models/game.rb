@@ -5,6 +5,7 @@ class Game < ApplicationRecord
 
   has_many :rounds
 
+  ##todo fix this
   validates :title, presence: true
 
 
