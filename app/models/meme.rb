@@ -7,3 +7,6 @@ class Meme < ApplicationRecord
 
 
 end
+
+
+#validations are going to be important. How do to validations?

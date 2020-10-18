@@ -11,7 +11,6 @@ Round.destroy_all
   "I drink to forget ____",
   "Douchey custom license plate",
   "Greatest pickup line?",
-
  ]
 
 
